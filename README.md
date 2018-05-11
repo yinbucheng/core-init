@@ -27,8 +27,8 @@
         FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
         facedeBuilder.create();
         
-        
-        
+        idea运行会显示出来，eclipse需要手动刷新包
+        
         
  Dao层API讲解
    //保存及更新对象
