@@ -1,6 +1,8 @@
 package com.intellif.core;
 
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @PersistenceContext
     protected EntityManager entityManager;
+
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
 
 
     @Transactional(propagation = Propagation.REQUIRED)
