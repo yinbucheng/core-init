@@ -11,6 +11,7 @@ public class CoreCreateMain {
         coreConfig.setParentPacke("com.intellif");
         coreConfig.setJavaShortPath("src/main/java");
         coreConfig.setOpenController(true);
+        coreConfig.setAuthor("步程");
         FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
         facedeBuilder.create();
     }

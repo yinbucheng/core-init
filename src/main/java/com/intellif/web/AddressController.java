@@ -4,7 +4,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
 import com.intellif.service.*;
-import org.springframework.beans.factory.annotation.Autowired;@Controller
+import org.springframework.beans.factory.annotation.Autowired;
+/**
+* 作者:尹冲
+**/
+@Controller
 @RequestMapping("address")
 public class AddressController{
 
@@ -16,5 +20,4 @@ public class AddressController{
 	public Object test(){
 		return "success";
 	}
-
 }

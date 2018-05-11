@@ -44,7 +44,7 @@ public class CoreConfig {
             StringBuilder sb = new StringBuilder();
             sb.append("/**").append(PathConfig.newLine());
             sb.append("* 作者:").append(author).append(PathConfig.newLine());
-            sb.append("**/");
+            sb.append("**/").append(PathConfig.newLine());
             return sb.toString();
         }
 

@@ -36,7 +36,7 @@ public class ControllerBuilder {
                         .append("import org.springframework.web.bind.annotation.ResponseBody;").append(PathConfig.newLine())//
                         .append("import org.springframework.stereotype.Controller;").append(PathConfig.newLine())//
                         .append("import "+coreConfig.getServicePage()+".*;").append(PathConfig.newLine())//
-                        .append("import org.springframework.beans.factory.annotation.Autowired;")
+                        .append("import org.springframework.beans.factory.annotation.Autowired;").append(PathConfig.newLine())//
                         .append(coreConfig.getAuthor())//
                         .append("@Controller").append(PathConfig.newLine())//
                         .append("@RequestMapping(\""+className.substring(0,1).toLowerCase()+className.substring(1)+"\")").append(PathConfig.newLine())//
