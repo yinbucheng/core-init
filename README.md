@@ -23,7 +23,6 @@
         
         //设置作者名称
         coreConfig.setAuthor("Mike");
-        
         //开始代码生成
         FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
         facedeBuilder.create();
