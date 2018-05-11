@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import com.intellif.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 /**
-* 作者:尹冲
+* 作者:步程
 **/
 @Controller
 @RequestMapping("address")

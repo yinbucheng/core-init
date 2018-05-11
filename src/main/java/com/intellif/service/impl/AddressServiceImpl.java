@@ -5,7 +5,7 @@ import com.intellif.dao.AddressDao;
 import org.springframework.stereotype.Service;
 import com.intellif.service.IAddressService;
 /**
-* 作者:尹冲
+* 作者:步程
 **/
 @Service
 public class AddressServiceImpl extends ServiceImpl<AddressDao,Address> implements IAddressService{
