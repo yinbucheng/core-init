@@ -1,5 +1,7 @@
 package com.intellif.core.init;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class CoreConfig {
             StringBuilder sb = new StringBuilder();
             sb.append("/**").append(PathConfig.newLine());
             sb.append("* 作者:").append(author).append(PathConfig.newLine());
+            sb.append("* 创建时间:").append(new SimpleDateFormat("yyyy-MM-dd").format(new Date())).append(PathConfig.newLine());
             sb.append("**/").append(PathConfig.newLine());
             return sb.toString();
         }
