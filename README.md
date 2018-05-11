@@ -3,20 +3,29 @@
 在domain中添加实体对象，然后运行CoreCreateMain就会生成Dao层Service层web层
 
 在CoreCreateMain中有如下：
+
         CoreConfig coreConfig = new CoreConfig();
+        
         //设置引入核心类的位置，这里已经配好了不用改
         coreConfig.setCorePage("com.intellif.core");
+        
         //设置实体对象的包路径
         coreConfig.setDomainPage("com.intellif.domain");
+        
         //设置web层service层web层在哪个父包下面
         coreConfig.setParentPacke("com.intellif");
-        //这里是设置路径idea路径就是这个样子不用改了
+        
+        //这里是设置路径这个样子不用改了
         coreConfig.setJavaShortPath("src/main/java");
+        
         //设置是否生成controller层默认不会生成
         coreConfig.setOpenController(true);
+        
         //设置作者名称
         coreConfig.setAuthor("Mike");
-        FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
+        
+        //开始代码生成
+        FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
         facedeBuilder.create();
         
         
