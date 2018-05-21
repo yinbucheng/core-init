@@ -1,6 +1,9 @@
 package com.intellif.core;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -27,6 +30,8 @@ public abstract class ReflectUtils {
             Map<String, Object> map = new HashMap<>();
             if (fields != null) {
                 for (Field field : fields) {
+                    if(field.getAnnotation(Transient.class)!=null)
+                        continue;
                     Object value = field.get(bean);
                     if(value!=null){
                         String name = field.getName();

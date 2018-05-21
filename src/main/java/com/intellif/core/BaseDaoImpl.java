@@ -541,7 +541,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             }
             tempHql= "select count(1) from("+tempHql+") as temp";
         }else{
-            tempHql="select count(1) "+tempHql;
+            tempHql="select count(p) "+tempHql;
         }
 
         return countHql(tempHql,params);
