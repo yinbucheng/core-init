@@ -3,9 +3,12 @@ package com.intellif.core;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -13,6 +16,9 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigInteger;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.*;
 
 /***
@@ -312,26 +318,70 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<Map<String, Object>> findSql(String sql, Object... params) {
-        if(sql==null||sql.equals(""))
-            return null;
-        Map<String, Object> map = getHSql(sql);
-        String jpaSql = (String) map.get("sql");
-        Integer count = (Integer) map.get("count");
-        Query query = entityManager.createNativeQuery(jpaSql);
-        setQueryParameters(count,query,params);
-        return query.unwrap(org.hibernate.SQLQuery.class)
-                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        List<Map<String,Object>> list = new LinkedList<>();
+        List<String> labels = new LinkedList<>();
+        jdbcTemplate.query(sql, params, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet resultSet) throws SQLException {
+                ResultSetMetaData rsd =  resultSet.getMetaData();
+                int count = rsd.getColumnCount();
+               if(labels.size()==0){
+                  for(int i=1;i<=count;i++){
+                     labels.add(rsd.getColumnLabel(i));
+                  }
+               }
+               Map<String,Object> map = new HashMap<>();
+               for(int i=1;i<=count;i++){
+                   map.put(labels.get(i-1),resultSet.getObject(i));
+               }
+               list.add(map);
+            }
+        });
+        return list;
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public <T1> List<T1> findSql(String sql, Class<T1> clazz, Object... params) {
-        Map<String, Object> map = getSql(sql);
-        String jpaSql = (String) map.get("sql");
-        Integer count = (Integer) map.get("count");
-        Query query = entityManager.createNativeQuery(jpaSql,clazz);
-        setQueryParameters(count,query,params);
-        return query.getResultList();
+        List<String> lables = new LinkedList<>();
+        Map<String,String> propertiesName = listPropertiesName(clazz);
+         List<T1> result = jdbcTemplate.query(sql, params, new RowMapper<T1>() {
+           @Override
+           public T1 mapRow(ResultSet resultSet, int j) throws SQLException {
+              ResultSetMetaData rsd =  resultSet.getMetaData();
+              int count = rsd.getColumnCount();
+              if(lables.size()==0){
+                  for(int i=1;i<=count;i++){
+                     String name = rsd.getColumnLabel(i);
+                     lables.add(propertiesName.get(name));
+                  }
+              }
+              Map<String,Object> temp = new HashMap<>();
+              for(int i=1;i<=count;i++){
+                  temp.put(lables.get(i-1),resultSet.getObject(i));
+              }
+
+               return ReflectUtils.changeMapToBean(temp,clazz);
+           }
+       });
+      return result;
+    }
+
+
+
+    private Map<String,String> listPropertiesName(Class clazz){
+        List<Field> fields = ReflectUtils.listAllFields(clazz);
+        Map<String,String> result = new HashMap<>();
+        for(Field field:fields){
+            String value = field.getName();
+            String key = value;
+           Column column =  field.getAnnotation(Column.class);
+           if(column!=null){
+               value = column.name();
+           }
+           result.put(key,value);
+        }
+        return result;
     }
 
     @Override

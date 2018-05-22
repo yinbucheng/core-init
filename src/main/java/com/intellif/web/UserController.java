@@ -17,8 +17,8 @@ public class UserController{
 	private IUserService  userService;
 
 	@RequestMapping("test")
-	public Object test(){
-		return "success";
+	public Object test() {
+		return userService.findSql("select * from db1.t_user");
 	}
 
 	@RequestMapping("save")
@@ -50,6 +50,7 @@ public class UserController{
 	public Object findAgeBetween(Integer startAge,Integer endAge){
 		return userService.listBetweenField("age",startAge,endAge);
 	}
+
 
 
 }

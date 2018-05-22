@@ -231,25 +231,29 @@ public abstract class ReflectUtils {
      * @return
      * @throws Exception
      */
-    public static <T> T changeMapToBean(Map<String,Object> data,Class clazz)throws Exception{
-        List<Field> fields = listAllFields(clazz);
-        T bean = (T) clazz.newInstance();
-        if(fields!=null&&fields.size()>0){
-            for(Field field:fields){
-                String name = field.getName();
-                Object value = data.get(name);
-                if(isEmpty(value))
-                    continue;
-                if(isSimpleType(field.getType())){
-                    field.set(bean, value);
-                }else{
-                    Map<String,Object> tempMap = (Map<String, Object>) value;
-                    Object resultValue = changeMapToBean(tempMap,field.getType());
-                    field.set(bean, resultValue);
+    public static <T> T changeMapToBean(Map<String,Object> data,Class clazz){
+        try {
+            List<Field> fields = listAllFields(clazz);
+            T bean = (T) clazz.newInstance();
+            if (fields != null && fields.size() > 0) {
+                for (Field field : fields) {
+                    String name = field.getName();
+                    Object value = data.get(name);
+                    if (isEmpty(value))
+                        continue;
+                    if (isSimpleType(field.getType())) {
+                        field.set(bean, value);
+                    } else {
+                        Map<String, Object> tempMap = (Map<String, Object>) value;
+                        Object resultValue = changeMapToBean(tempMap, field.getType());
+                        field.set(bean, resultValue);
+                    }
                 }
             }
+            return bean;
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-        return bean;
     }
 
     /**
