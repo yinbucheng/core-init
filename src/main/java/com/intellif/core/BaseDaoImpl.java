@@ -446,6 +446,64 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return pageBean;
     }
 
+    /**
+     * 分页查找
+     * @param sql
+     * @param clazz
+     * @param pageNum
+     * @param pageSize
+     * @param params
+     * @param <T2>
+     * @return
+     */
+    public<T2> PageBean<T2> findSql(String sql,Class<T2> clazz,int pageNum,int pageSize,Object... params){
+        PageBean<T2> pageBean = new PageBean<>();
+        pageBean.setPageNum(pageNum);
+        pageBean.setPageSize(pageSize);
+        Map<String, Object> map = getSql(sql);
+        String jpaSql = (String) map.get("sql");
+        Integer count = (Integer) map.get("count");
+        Long totalCount = getCount(sql, count, params);
+        if(totalCount==null||totalCount==0){
+            pageBean.setTotalCount(0L);
+            return pageBean;
+        }
+        pageBean.setTotalCount(totalCount);
+        sql = getLimitSql(sql, pageNum, pageSize);
+        List<T2> data = findSql(sql,clazz,params);
+        pageBean.setDatas(data);
+        return pageBean;
+    }
+
+    /**
+     * 获取不同环境下分页语句
+     * @param sql
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    private String getLimitSql(String sql, int pageNum, int pageSize) {
+        int start = (pageNum-1)*pageSize;
+        int end = (pageNum)*pageSize;
+        String dataName = getDatabaseProductName();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>dataName:"+dataName);
+        switch (dataName){
+            case "mysql":
+                sql+=" limit "+start+", "+end;
+                break;
+            case "oracle":
+                sql+=" and rn between "+start+" and "+end;
+                break;
+            case "sqlserver":
+                sql+=" offset "+start+" rows fetch next "+end+" rows only";
+                break;
+            case "postgresql":
+                sql+=" limit "+start+" offset "+end;
+                break;
+        }
+        return sql;
+    }
+
     private Long getCount(String sql, Integer count, Object... params) {
         if (params != null) {
             if (count != params.length)
