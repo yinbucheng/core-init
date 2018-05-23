@@ -456,7 +456,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
      * @param <T2>
      * @return
      */
-    public<T2> PageBean<T2> findSql(String sql,Class<T2> clazz,int pageNum,int pageSize,Object... params){
+    public<T2> PageBean<T2> pageSql(String sql,Class<T2> clazz,int pageNum,int pageSize,Object... params){
         PageBean<T2> pageBean = new PageBean<>();
         pageBean.setPageNum(pageNum);
         pageBean.setPageSize(pageSize);

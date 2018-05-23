@@ -172,6 +172,8 @@ public interface BaseDao<T> {
      */
     PageBean<Map<String,Object>> pageSql(String sql, Integer pageNum, Integer pageSize, Object... params);
 
+    <T2> PageBean<T2> pageSql(String sql,Class<T2> clazz,int pageNum,int pageSize,Object... params);
+
     /**
      * 分页查询
      * @param sql
