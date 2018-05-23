@@ -209,19 +209,23 @@ public abstract class ReflectUtils {
      * @return
      * @throws Exception
      */
-    public static <T> T simpleChangeMapToBean(Map<String,Object> data,Class clazz)throws Exception{
-        List<Field> fields = listAllFields(clazz);
-        T bean = (T) clazz.newInstance();
-        if(fields!=null&&fields.size()>0){
-            for(Field field:fields){
-                String name = field.getName();
-                Object value = data.get(name);
-                if(isEmpty(value))
-                    continue;
-                field.set(bean, value);
+    public static <T> T changeMapToBean(Map<String,Object> data,Class clazz){
+        try {
+            List<Field> fields = listAllFields(clazz);
+            T bean = (T) clazz.newInstance();
+            if (fields != null && fields.size() > 0) {
+                for (Field field : fields) {
+                    String name = field.getName();
+                    Object value = data.get(name);
+                    if (isEmpty(value))
+                        continue;
+                    field.set(bean, value);
+                }
             }
+            return bean;
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-        return bean;
     }
 
     /**
@@ -231,7 +235,7 @@ public abstract class ReflectUtils {
      * @return
      * @throws Exception
      */
-    public static <T> T changeMapToBean(Map<String,Object> data,Class clazz){
+    public static <T> T deepChangeMap2Bean(Map<String,Object> data,Class clazz){
         try {
             List<Field> fields = listAllFields(clazz);
             T bean = (T) clazz.newInstance();
@@ -245,7 +249,7 @@ public abstract class ReflectUtils {
                         field.set(bean, value);
                     } else {
                         Map<String, Object> tempMap = (Map<String, Object>) value;
-                        Object resultValue = changeMapToBean(tempMap, field.getType());
+                        Object resultValue = deepChangeMap2Bean(tempMap, field.getType());
                         field.set(bean, resultValue);
                     }
                 }

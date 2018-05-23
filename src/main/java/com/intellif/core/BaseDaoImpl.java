@@ -360,7 +360,6 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
               for(int i=1;i<=count;i++){
                   temp.put(lables.get(i-1),resultSet.getObject(i));
               }
-
                return ReflectUtils.changeMapToBean(temp,clazz);
            }
        });
@@ -395,7 +394,27 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return query.getResultList();
     }
 
+    /**
+     * 获取数据库类型
+     * @return
+     */
+    private String getDatabaseProductName(){
+        try {
+          return   jdbcTemplate.getDataSource().getConnection().getMetaData().getDatabaseProductName().toLowerCase();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+
+    /**
+     *
+     * @param sql
+     * @param pageNum  第几页 从1开始
+     * @param pageSize 每页显示多少个
+     * @param params   需要传递的参数
+     * @return
+     */
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageBean<Map<String, Object>> pageSql(String sql, Integer pageNum, Integer pageSize, Object... params) {
@@ -411,17 +430,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             return pageBean;
         }
         pageBean.setTotalCount(totalCount);
-        Query query = entityManager.createNativeQuery(jpaSql);
-        limitDatas(pageNum,pageSize,query);
-        if (params != null && params.length > 0) {
-            int length = params.length;
-            for (int i = 0; i < length; i++) {
-                query.setParameter(i + 1, params[i]);
-            }
+        int start = (pageNum-1)*pageSize;
+        int end = (pageNum)*pageSize;
+        String dataName = getDatabaseProductName();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>dataName:"+dataName);
+        switch (dataName){
+            case "mysql":
+                sql+=" limit "+start+", "+end;
+                break;
+            case "oracle":
+                break;
         }
-        List<Map<String,Object>> result =   query.unwrap(org.hibernate.SQLQuery.class)
-                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-        pageBean.setDatas(result);
+        List<Map<String,Object>> data = findSql(sql,params);
+        pageBean.setDatas(data);
         return pageBean;
     }
 
@@ -640,8 +661,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public Long countSql(String sql, Object... params) {
-        Query query =createSqlQuery(sql,params);
-        return ((BigInteger) query.getSingleResult()).longValue();
+        return  jdbcTemplate.queryForObject(sql,params,Long.class);
     }
 
     @Override

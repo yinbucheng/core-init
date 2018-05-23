@@ -17,8 +17,8 @@ public class UserController{
 	private IUserService  userService;
 
 	@RequestMapping("test")
-	public Object test() {
-		return userService.findSql("select * from db1.t_user");
+	public Object test(int pageNum,int pageSize) {
+		return userService.findSql("select * from db1.t_user",pageNum,pageSize);
 	}
 
 	@RequestMapping("save")
