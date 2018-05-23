@@ -18,7 +18,7 @@ public class UserController{
 
 	@RequestMapping("test")
 	public Object test(int pageNum,int pageSize) {
-		return userService.findSql("select p.id from User p ",pageNum,pageSize);
+		return userService.findSql("select p.id from User p",pageNum,pageSize);
 	}
 
 	@RequestMapping("save")
