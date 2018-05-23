@@ -113,7 +113,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     public List<T> findAllDesc() {
         String id = getIdProperties(clazz);
         String hql = "select t from " + clazz.getSimpleName() + " t order by t."+id+" desc";
-        return findHql(hql);
+        return findHql(hql,clazz);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<T> findAllDesc(String fieldName) {
         String hql = "select t from " + clazz.getSimpleName() + " t order by t."+fieldName+" desc";
-        return findHql(hql);
+        return findHql(hql,clazz);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     public List<T> findAllAsc() {
         String id = getIdProperties(clazz);
         String hql = "select t from " + clazz.getSimpleName() + " t order by t."+id+" asc";
-        return findHql(hql);
+        return findHql(hql,clazz);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<T> findAllAsc(String fieldName) {
         String hql = "select t from " + clazz.getSimpleName() + " t order by t."+fieldName+" asc";
-        return findHql(hql);
+        return findHql(hql,clazz);
     }
 
     @Override
@@ -343,6 +343,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public <T1> List<T1> findSql(String sql, Class<T1> clazz, Object... params) {
+        if(ReflectUtils.isSimpleType(clazz)){
+            return jdbcTemplate.queryForList(sql,params,clazz);
+        }
         List<String> lables = new LinkedList<>();
         Map<String,String> propertiesName = listPropertiesName(clazz);
          List<T1> result = jdbcTemplate.query(sql, params, new RowMapper<T1>() {
@@ -589,14 +592,14 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<T> findHql(String hql, Object... params) {
+    public<T2> List<T2> findHql(String hql,Class<T2> clazz, Object... params) {
         Map<String, Object> map = getHSql(hql);
         String jpaSql = (String) map.get("sql");
         Integer count = (Integer) map.get("count");
         //获取数据
         Query query = entityManager.createQuery(jpaSql,clazz);
         setQueryParameters(count,query,params);
-        List<T> records =  query.getResultList();
+        List<T2> records =  query.getResultList();
         return records;
     }
 
@@ -834,18 +837,13 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         //获取数据
         Query query = entityManager.createQuery(jpaSql,clazz);
         setQueryParameters(count,query,params);
-        return (T2) query.getResultList();
+        return (T2) query.getSingleResult();
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public <T2> T2 findOneSql(String sql, Class<T2> clazz,Object... params) {
-        Map<String, Object> map = getSql(sql);
-        String jpaSql = (String) map.get("sql");
-        Integer count = (Integer) map.get("count");
-        Query query = entityManager.createNativeQuery(jpaSql,clazz);
-        setQueryParameters(count,query,params);
-        return (T2) query.getResultList();
+        return jdbcTemplate.queryForObject(sql,params,clazz);
     }
 
     private void setQueryParamters(Map<String, Object> data, Query query) {

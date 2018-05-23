@@ -10,10 +10,23 @@ import java.util.Map;
  */
 public interface BaseDao<T> {
 
+    /**
+     * 保存和更新数据
+     * @param bean
+     */
     void save(T bean);
 
+    /**
+     * 更新数据
+     * @param bean
+     */
     void update(T bean);
 
+    /**
+     * 根据id查询数据
+     * @param id
+     * @return
+     */
     T findOne(Serializable id);
 
     /**
@@ -172,6 +185,16 @@ public interface BaseDao<T> {
      */
     PageBean<Map<String,Object>> pageSql(String sql, Integer pageNum, Integer pageSize, Object... params);
 
+    /**
+     * 分页显示数据
+     * @param sql
+     * @param clazz
+     * @param pageNum
+     * @param pageSize
+     * @param params
+     * @param <T2>
+     * @return
+     */
     <T2> PageBean<T2> pageSql(String sql,Class<T2> clazz,int pageNum,int pageSize,Object... params);
 
     /**
@@ -190,7 +213,7 @@ public interface BaseDao<T> {
      * @param params
      * @return
      */
-    List<T> findHql(String hql, Object... params);
+    <T2> List<T2> findHql(String hql,Class<T2> clazz, Object... params);
 
     /**
      * hql语句返回Object[]对象
@@ -295,7 +318,7 @@ public interface BaseDao<T> {
     List<T> findOrFields(Map<String, Object> data);
 
     /**
-     * 获取一个指定类型结果
+     * 获取一条记录方法
      * @param hql
      * @param clazz
      * @param <T2>
@@ -304,7 +327,7 @@ public interface BaseDao<T> {
     <T2> T2 findOneHql(String hql, Class<T2> clazz, Object... params);
 
     /**
-     * 获取一个指定类型结果
+     * 返回小于等于一条结果时
      * @param sql
      * @param clazz
      * @param <T2>
