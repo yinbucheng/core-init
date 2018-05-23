@@ -758,36 +758,29 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<T> findEqualField(String field, Object value) {
-        Query query = entityManager.createQuery("select p from "+clazz.getSimpleName()+" p where p."+field+" = ?1",clazz);
-        query.setParameter(1,value);
-        List<T> records =  query.getResultList();
-        return records;
+        String hql = "select p from "+clazz.getSimpleName()+" p where p."+field+" = ?";
+        return findHql(hql,clazz,value);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<T> findLikeField(String field, String value) {
-        Query query = entityManager.createQuery("select p from "+clazz.getSimpleName()+" p where p."+field+" like ?1");
-        query.setParameter(1,value);
-        List<T> records =  query.getResultList();
-        return records;
+        String hql = "select p from "+clazz.getSimpleName()+" p where p."+field+" like ?";
+        return findHql(hql,clazz,value);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<T> findBetweenField(String field, Object start, Object end) {
-        Query query = entityManager.createQuery("select p from "+clazz.getSimpleName()+" p where p."+field+" between ?1 and ?2");
-        query.setParameter(1,start);
-        query.setParameter(2,end);
-        List<T> records =  query.getResultList();
-        return records;
+        String hql = "select p from "+clazz.getSimpleName()+" p where p."+field+" between ? and ?";
+        return findHql(hql,clazz,start,end);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public int deleteAll() {
-        Query query = entityManager.createQuery("delete from " + clazz.getSimpleName() + " p ");
-        return query.executeUpdate();
+        String hql = "delete from " + clazz.getSimpleName() + " p ";
+        return executeHql(hql);
     }
 
     @Override
