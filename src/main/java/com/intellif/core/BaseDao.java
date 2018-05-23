@@ -150,7 +150,6 @@ public interface BaseDao<T> {
 
     /**
      * 根据原始sql语句执行sql
-     *
      * @param sql    原始sql语句
      * @param params 要传递的参数
      * @return map对象
@@ -224,11 +223,13 @@ public interface BaseDao<T> {
     List<Object[]> findObjectHql(String hql, Object... params);
 
     /**
-     * hql的分页操作
-     * @param hql
-     * @param pageNum
-     * @param pageSize
-     * @param params
+     * 分页查询
+     * @param hql hql语句 (注意hql中的未知参数用？表 selec p from User p where p.name = ?)
+     * @param clazz 要查询的对象可以是自定义类型也可是java中自定义类型比如String
+     * @param pageNum 第几页
+     * @param pageSize 每页显示多少数据
+     * @param params hql中需要的参数
+     * @param <T2>
      * @return
      */
     <T2> PageBean<T2> pageHql(String hql,Class<T2> clazz, Integer pageNum, Integer pageSize, Object... params);

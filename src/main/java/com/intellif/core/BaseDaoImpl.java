@@ -700,8 +700,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public Long countHql(String hql, Object... params) {
-        Query query = createHqlQuery(hql,params);
-        return ((Long)query.getSingleResult());
+        return findOneHql(hql,Long.class,params);
     }
 
     /**
