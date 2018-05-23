@@ -231,7 +231,7 @@ public interface BaseDao<T> {
      * @param params
      * @return
      */
-    PageBean<T> pageHql(String hql, Integer pageNum, Integer pageSize, Object... params);
+    <T2> PageBean<T2> pageHql(String hql,Class<T2> clazz, Integer pageNum, Integer pageSize, Object... params);
 
 
     /**

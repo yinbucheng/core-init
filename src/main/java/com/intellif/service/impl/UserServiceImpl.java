@@ -13,6 +13,6 @@ import java.util.Map;
 public class UserServiceImpl extends ServiceImpl<UserDao,User> implements IUserService{
     @Override
     public Object findSql(String sql,int pageNum,int pageSize) {
-       return baseDao.findHql(sql,Long.class);
+       return baseDao.pageSql(sql,Long.class,pageNum,pageSize);
     }
 }

@@ -618,9 +618,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageBean<T> pageHql(String hql, Integer pageNum, Integer pageSize, Object... params) {
+    public<T2> PageBean<T2> pageHql(String hql,Class<T2> clazz, Integer pageNum, Integer pageSize, Object... params) {
 
-        PageBean<T> pageBean = new PageBean<>();
+        PageBean<T2> pageBean = new PageBean<>();
         pageBean.setPageNum(pageNum);
         pageBean.setPageSize(pageSize);
         Map<String, Object> map = getHSql(hql);
@@ -642,7 +642,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             }
         }
         limitDatas(pageNum, pageSize, query);
-        List<T> records =  query.getResultList();
+        List<T2> records =  query.getResultList();
         pageBean.setDatas(records);
         return pageBean;
     }
@@ -671,9 +671,12 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             if (end > 0) {
                 tempHql = tempHql.substring(0, end);
             }
-            tempHql= "select count(1) from("+tempHql+") as temp";
+           //找到第一from
+            int index = tempHql.indexOf("from");
+            tempHql=tempHql.substring(index);
+            tempHql = "select count(id) "+tempHql;
         }else{
-            tempHql="select count(p) "+tempHql;
+            tempHql="select count(id) "+tempHql;
         }
 
         return countHql(tempHql,params);
