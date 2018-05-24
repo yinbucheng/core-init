@@ -33,8 +33,7 @@ public class ControllerBuilder {
                 StringBuilder sb = new StringBuilder("package "+controllerPage+";").append(PathConfig.newLine())//
                         .append("import "+coreConfig.getDomainPage()+"."+className+";").append(PathConfig.newLine())//
                         .append("import org.springframework.web.bind.annotation.RequestMapping;").append(PathConfig.newLine())//
-                        .append("import org.springframework.web.bind.annotation.ResponseBody;").append(PathConfig.newLine())//
-                        .append("import org.springframework.stereotype.Controller;").append(PathConfig.newLine())//
+                        .append("import org.springframework.web.bind.annotation.RestController;").append(PathConfig.newLine())//
                         .append("import "+coreConfig.getServicePage()+".*;").append(PathConfig.newLine())//
                         .append("import org.springframework.beans.factory.annotation.Autowired;").append(PathConfig.newLine())//
                         .append(coreConfig.getAuthor())//
