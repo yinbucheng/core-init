@@ -46,7 +46,7 @@ public class ServiceBuilder {
                         .append("}");// ;
                 PathConfig.copyToFile(file,sb.toString());
 
-                //添加dao中内容
+
                 String serviceImplPath = servicePath+"//impl";
                 String serviceImplName = className+"ServiceImpl";
                 file = new File(serviceImplPath+"//"+serviceImplName+".java");

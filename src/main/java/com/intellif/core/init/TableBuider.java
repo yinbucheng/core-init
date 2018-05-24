@@ -2,7 +2,6 @@ package com.intellif.core.init;
 
 import com.intellif.core.BaseUtils;
 import com.intellif.core.ReflectUtils;
-import org.springframework.web.util.WebUtils;
 
 import javax.persistence.*;
 import java.io.*;
@@ -155,6 +154,11 @@ public class TableBuider {
         return content;
     }
 
+    /**
+     * 创建id
+     * @param clazz
+     * @param sb
+     */
     private void creatMysqlId(Class clazz, StringBuilder sb) {
         //设置主键
         Field idField =  ReflectUtils.getIdField(clazz);

@@ -11,7 +11,7 @@ public class CoreCreateMain {
         coreConfig.setParentPacke("com.intellif");
         coreConfig.setJavaShortPath("src/main/java");
         coreConfig.setResourcePath("src/main/resources");
-        coreConfig.setOpenController(true);
+        coreConfig.openController();
         coreConfig.openCreateTable();
         coreConfig.setTableFile("schema-mysql.sql");
         coreConfig.setAuthor("步程");

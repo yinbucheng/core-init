@@ -56,6 +56,10 @@ public class CoreConfig {
         createTable = true;
     }
 
+    public void closeCreateTable(){
+        createTable = false;
+    }
+
     public Boolean isCreateTable(){
         return createTable;
     }
@@ -154,25 +158,34 @@ public class CoreConfig {
         return openController;
     }
 
-    public void setOpenController(boolean openController) {
-        this.openController = openController;
+    public void openController() {
+        this.openController = true;
+    }
+
+    public void closeController(){
+        this.openController =false;
     }
 
     public boolean isOpenService() {
         return openService;
     }
 
-    public void setOpenService(boolean openService) {
-        this.openService = openService;
+    public void openService() {
+        this.openService = true;
+    }
+    public void closeService(){
+        this.openService = false;
     }
 
     public boolean isOpenDao() {
         return openDao;
     }
 
-    public void setOpenDao(boolean openDao) {
-        this.openDao = openDao;
+    public void opendDao() {
+        this.openDao = true;
     }
+
+    public void closeDao(){this.openDao = false;}
 
     public String getDomainRealPath(){
         String path = PathConfig.getProjectPath();
