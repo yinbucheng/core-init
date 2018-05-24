@@ -9,27 +9,16 @@
 ## 如何只需配置生成
 
 CoreConfig coreConfig = new CoreConfig();
-
    coreConfig.setCorePage("com.intellif.core");
-   
    coreConfig.setDomainPage("com.intellif.domain");
-   
    coreConfig.setParentPacke("com.intellif");
-   
    coreConfig.setJavaShortPath("src/main/java");
-   
    coreConfig.setResourcePath("src/main/resources");
-   
    coreConfig.setOpenController(true);
-   
    coreConfig.openCreateTable();
-   
    coreConfig.setTableFile("schema-mysql.sql");
-   
    coreConfig.setAuthor("步程");
-   
    FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
-   
    facedeBuilder.create();
    
    
@@ -37,11 +26,8 @@ CoreConfig coreConfig = new CoreConfig();
 
 ## 如何使用
 1.修改成自己的数据的配置
-
 3.创建你想要的实体对象
-
 4.运行CoreCreateMain
-
 5.在web层编写想要的逻辑
-
 6.运行CoreInitApplication启动spring-boot
+
