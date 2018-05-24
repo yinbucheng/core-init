@@ -8,7 +8,7 @@
 
 ## 如何只需配置生成
 
-CoreConfig coreConfig = new CoreConfig();
+CoreConfig coreConfig = new CoreConfig();\n
    coreConfig.setCorePage("com.intellif.core");
    coreConfig.setDomainPage("com.intellif.domain");
    coreConfig.setParentPacke("com.intellif");
