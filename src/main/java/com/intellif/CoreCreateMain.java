@@ -10,7 +10,10 @@ public class CoreCreateMain {
         coreConfig.setDomainPage("com.intellif.domain");
         coreConfig.setParentPacke("com.intellif");
         coreConfig.setJavaShortPath("src/main/java");
+        coreConfig.setResourcePath("src/main/resources");
         coreConfig.setOpenController(true);
+        coreConfig.openCreateTable();
+        coreConfig.setTableFile("schema-mysql.sql");
         coreConfig.setAuthor("步程");
         FacedeBuilder facedeBuilder = new FacedeBuilder(coreConfig);
         facedeBuilder.create();

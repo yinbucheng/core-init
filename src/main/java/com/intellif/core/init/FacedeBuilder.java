@@ -6,6 +6,7 @@ public class FacedeBuilder {
     private ControllerBuilder controllerBuilder;
     private ServiceBuilder serviceBuilder ;
     private DaoBuilder daoBudiler;
+    private TableBuider tableBuider;
 
     private CoreConfig coreConfig;
 
@@ -14,6 +15,7 @@ public class FacedeBuilder {
         controllerBuilder = new ControllerBuilder(config);
         serviceBuilder = new ServiceBuilder(config);
         daoBudiler = new DaoBuilder(config);
+        tableBuider = new TableBuider(coreConfig);
     }
 
     private void loadClassName(){
@@ -75,6 +77,9 @@ public class FacedeBuilder {
         }
         if(coreConfig.isOpenController()){
             controllerBuilder.create();
+        }
+        if(coreConfig.isCreateTable()){
+            tableBuider.create();
         }
     }
 }

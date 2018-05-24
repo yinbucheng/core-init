@@ -224,7 +224,7 @@ public interface BaseDao<T> {
 
     /**
      * 分页查询
-     * @param hql hql语句 (注意hql中的未知参数用？表 selec p from User p where p.name = ?)
+     * @param hql hql语句 (注意hql中的未知参数用？表 selec p from Teacher p where p.name = ?)
      * @param clazz 要查询的对象可以是自定义类型也可是java中自定义类型比如String
      * @param pageNum 第几页
      * @param pageSize 每页显示多少数据

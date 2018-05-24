@@ -1,27 +1,26 @@
 package com.intellif.domain;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
-@Table(schema = "db1",name = "t_user")
-public class User implements Serializable {
-
+@Table(schema = "test2",name = "t_person")
+public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private Integer age;
-    private Date birthday;
 
-    public Date getBirthday() {
-        return birthday;
-    }
+    @Column(name="id_card")
+    private String idCard;
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
+    @Transient
+    private MultipartFile file;
 
     public Long getId() {
         return id;
@@ -45,5 +44,21 @@ public class User implements Serializable {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 }

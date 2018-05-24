@@ -38,7 +38,7 @@ public class ControllerBuilder {
                         .append("import "+coreConfig.getServicePage()+".*;").append(PathConfig.newLine())//
                         .append("import org.springframework.beans.factory.annotation.Autowired;").append(PathConfig.newLine())//
                         .append(coreConfig.getAuthor())//
-                        .append("@Controller").append(PathConfig.newLine())//
+                        .append("@RestController").append(PathConfig.newLine())//
                         .append("@RequestMapping(\""+className.substring(0,1).toLowerCase()+className.substring(1)+"\")").append(PathConfig.newLine())//
                         .append("public class "+controllerName+"{").append(PathConfig.newLine())//
                         .append(PathConfig.newLine())//
@@ -46,7 +46,6 @@ public class ControllerBuilder {
                         .append("\tprivate I"+className+"Service  "+className.substring(0,1).toLowerCase()+className.substring(1)+"Service;").append(PathConfig.newLine())//
                         .append(PathConfig.newLine())//
                         .append("\t@RequestMapping(\"test\")").append(PathConfig.newLine())//
-                        .append("\t@ResponseBody").append(PathConfig.newLine())//
                         .append("\tpublic Object test(){").append(PathConfig.newLine())//
                         .append("\t\treturn \"success\";").append(PathConfig.newLine())//
                         .append("\t}").append(PathConfig.newLine())//

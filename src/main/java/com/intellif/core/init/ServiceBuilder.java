@@ -31,6 +31,8 @@ public class ServiceBuilder {
                 }
                 if(!path.exists()) {
                     path.mkdirs();
+                }
+                if(!path2.exists()){
                     path2.mkdirs();
                 }
                 File file = new File(servicePath+"//"+serviceName+".java");

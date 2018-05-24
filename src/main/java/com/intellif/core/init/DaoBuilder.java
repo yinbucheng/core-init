@@ -26,6 +26,8 @@ public class DaoBuilder {
                File path2 = new File(daoPath+"//impl");
                if(!path.exists()) {
                    path.mkdirs();
+               }
+               if(!path2.exists()){
                    path2.mkdirs();
                }
                File file = new File(daoPath+"//"+daoName+".java");

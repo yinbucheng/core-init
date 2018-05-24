@@ -30,14 +30,43 @@ public class CoreConfig {
     //设置作者
     private String author;
 
+    private String resourcePath ="src//main//resources";
+    private Boolean createTable=false;
+    //创建表语句名称
+    private String tableFile ="schema.sql";
+
     //存放类名称的数据
     private List<String> classNames= new LinkedList<>();
 
-    private String javaShortPath;
+    private String javaShortPath="src//main//java";
 
     private boolean openController =false;
     private boolean openService = true;
     private boolean openDao = true;
+
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
+    }
+
+    public void openCreateTable(){
+        createTable = true;
+    }
+
+    public Boolean isCreateTable(){
+        return createTable;
+    }
+
+    public String getTableFile() {
+        return tableFile;
+    }
+
+    public void setTableFile(String tableFile) {
+        this.tableFile = tableFile;
+    }
 
     public String getAuthor() {
         if(author==null) {
