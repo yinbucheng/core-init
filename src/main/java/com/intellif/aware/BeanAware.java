@@ -5,14 +5,12 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-//@Component
 public class BeanAware implements BeanPostProcessor {
 
     @Override
