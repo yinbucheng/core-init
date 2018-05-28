@@ -11,6 +11,6 @@ import org.springframework.context.ApplicationContext;
 public class CoreInitApplication {
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(CoreInitApplication.class, args);
+		SpringApplication.run(CoreInitApplication.class, args);
 	}
 }

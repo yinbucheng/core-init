@@ -6,4 +6,8 @@ import com.intellif.domain.Person;
 * 创建时间:2018-05-24
 **/
 public interface IPersonService extends IService<Person>{
+
+    void savePerson(Person person);
+
+    Object listPerson();
 }
