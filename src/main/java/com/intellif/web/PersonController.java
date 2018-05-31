@@ -3,9 +3,13 @@ package com.intellif.web;
 import com.intellif.core.ServerResult;
 import com.intellif.domain.Person;
 import com.intellif.service.IPersonService;
+import com.intellif.utils.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
+
 /**
 * 作者:步程
 * 创建时间:2018-05-24
@@ -19,6 +23,13 @@ public class PersonController{
 
 	@RequestMapping("test")
 	public Object test(){
+		HttpSession session = WebUtils.getRequest().getSession();
+		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>sessionId "+session.getId());
+		if(session.isNew()){
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>session 是新创建的");
+		}else{
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>session 是旧的");
+		}
 		return "success";
 	}
 
