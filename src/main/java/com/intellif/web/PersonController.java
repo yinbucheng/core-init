@@ -1,5 +1,9 @@
 package com.intellif.web;
 
+import com.intellif.annotation.Print;
+import com.intellif.annotation.PrintAll;
+import com.intellif.annotation.PrintArgsDetail;
+import com.intellif.annotation.PrintMethodTime;
 import com.intellif.core.ServerResult;
 import com.intellif.domain.Person;
 import com.intellif.service.IPersonService;
@@ -16,20 +20,15 @@ import javax.servlet.http.HttpSession;
 **/
 @RestController
 @RequestMapping("person")
+@Print
 public class PersonController{
 
 	@Autowired
 	private IPersonService  personService;
 
 	@RequestMapping("test")
-	public Object test(){
-		HttpSession session = WebUtils.getRequest().getSession();
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>sessionId "+session.getId());
-		if(session.isNew()){
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>session 是新创建的");
-		}else{
-			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>session 是旧的");
-		}
+	@PrintAll
+	public Object test(String name,Integer age){
 		return "success";
 	}
 
@@ -44,6 +43,7 @@ public class PersonController{
 	}
 
 	@RequestMapping("/listAll")
+	@PrintAll
 	public Object listAll(){
 		Object datas = personService.listPerson();
 		return ServerResult.success(datas);
