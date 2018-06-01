@@ -64,21 +64,44 @@ public class ArgsDetailHander extends Hander {
         }
     }
 
-    private StringBuilder getAgrsDetails(Method method, Object[] args, Class clazz) {
+    private StringBuilder getAgrsDetails(Method method, Object[] args, Class clazz) throws NoSuchMethodException {
+        String[] ignore = null;
+        Method sourceMethod = clazz.getMethod(method.getName(),method.getParameterTypes());
+        PrintArgsDetail annotation = sourceMethod.getAnnotation(PrintArgsDetail.class);
+        if(annotation!=null){
+            ignore = annotation.ignore();
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>参数封装 "+clazz.getName()+":"+method.getName()+"(");
         List<String> paramNames = listParamNames(clazz,method.getName());
         if(paramNames!=null){
             int length = paramNames.size();
+            StringBuilder sb2 = new StringBuilder();
             for (int i=0;i<length;i++){
-                sb.append(paramNames.get(i)).append("=").append(args[i]);
-                if(i!=length-1){
-                    sb.append(",");
-                }
+                String name = paramNames.get(i);
+                if(ignore(ignore,name))
+                    continue;
+                sb2.append(name).append("=").append(args[i]);
+                sb2.append(",");
             }
-            sb.append(")");
+            String content = sb2.toString();
+            if(content.endsWith(",")){
+                content = content.substring(0,content.length()-1);
+            }
+           sb.append(content);
         }
+        sb.append(")");
         return sb;
+    }
+
+    private boolean ignore(String[] ignore,String name){
+        if(ignore==null||ignore.length==0)
+            return false;
+        for(String temp:ignore){
+            if(temp.equals(name))
+                return true;
+        }
+        return false;
     }
 
     public static List<String> listParamNames(Class target, String methodName){

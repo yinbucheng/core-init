@@ -27,7 +27,7 @@ public class PersonController{
 	private IPersonService  personService;
 
 	@RequestMapping("test")
-	@PrintAll
+	@PrintArgsDetail(ignore = {"age"})
 	public Object test(String name,Integer age){
 		return "success";
 	}

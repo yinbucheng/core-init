@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface PrintArgsDetail {
+    //需要忽视打印出来的参数
+    String[] ignore() default {};
 }
