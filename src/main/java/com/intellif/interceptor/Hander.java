@@ -6,7 +6,8 @@ public abstract class Hander {
 
     /**
      * 链式调用方法
-     * @param target
+     * @param target 代理的对象
+     * @param sourceObject 原始的对象
      * @return
      */
     public Object hander(Object target,Object sourceObject){

@@ -48,7 +48,7 @@ public class ArgsDetailHander extends Hander {
                     }
                     StringBuilder sb = getAgrsDetails(method, args, clazz);
                     logger.info(sb.toString());
-                    Object result = methodProxy.invoke(o,args);
+                    Object result = method.invoke(o,args);
                     return result;
                 }
             });
