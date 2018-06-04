@@ -18,11 +18,16 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ArgsDetailHander extends Hander {
     private Logger logger = Logger.getLogger(ArgsDetailHander.class);
+
+    private static Map<String,Object> cache = new ConcurrentHashMap<>();
     @Override
     public Object procced(Object o,Object sourceObject) {
         Class clazz = sourceObject.getClass();
@@ -73,7 +78,11 @@ public class ArgsDetailHander extends Hander {
         }
         StringBuilder sb = new StringBuilder();
         sb.append(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>参数封装 "+clazz.getName()+":"+method.getName()+"(");
-        List<String> paramNames = listParamNames(clazz,method.getName());
+        List<String> paramNames = (List<String>) cache.get(clazz.getName()+":"+method.getName());
+        if(paramNames==null) {
+            paramNames = listParamNames(clazz, method.getName());
+            cache.put(clazz.getName()+":"+method.getName(),paramNames);
+        }
         if(paramNames!=null){
             int length = paramNames.size();
             StringBuilder sb2 = new StringBuilder();
