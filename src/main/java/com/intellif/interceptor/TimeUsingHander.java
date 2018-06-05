@@ -17,27 +17,28 @@ public class TimeUsingHander extends Hander {
     private Logger logger = Logger.getLogger(TimeUsingHander.class);
 
     @Override
-    public Object procced(Object o,Object sourceObject) {
-        Class clazz = sourceObject.getClass();
-        Print print = (Print) clazz.getAnnotation(Print.class);
+    public Object procced(Object o) {
+        Class clazz = o.getClass();
+        Print print = (Print) CglibUtils.getAnnotation(clazz,Print.class);
         if(print==null)
             return o;
         Class[] interfaces = clazz.getInterfaces();
         //采用cglib
-        if(interfaces==null||interfaces.length==0){
+        if(interfaces==null||interfaces.length==0||(CglibUtils.containsCgilib(interfaces))){
             Enhancer enhancer = new Enhancer();
-            enhancer.setSuperclass(clazz);
+            Class baseClass = CglibUtils.getBaseClass(clazz);
+            enhancer.setSuperclass(baseClass);
             enhancer.setCallback(new MethodInterceptor() {
                 @Override
                 public Object intercept(Object proxy, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-                    Method sourceMethod = clazz.getMethod(method.getName(),method.getParameterTypes());
+                    Method sourceMethod = baseClass.getMethod(method.getName(),method.getParameterTypes());
                     if(sourceMethod.getAnnotation(PrintMethodTime.class)==null&&sourceMethod.getAnnotation(PrintAll.class)==null){
                         return method.invoke(o,objects);
                     }
                     long startTime =System.currentTimeMillis();
                     Object result = method.invoke(o,objects);
                     long endTime = System.currentTimeMillis();
-                    logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+clazz.getName()+":"+method.getName()+" 方法执行耗时为"+(endTime-startTime));
+                    logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+baseClass.getName()+":"+method.getName()+" 方法执行耗时为"+(endTime-startTime));
                     return result;
                 }
             });
@@ -59,4 +60,6 @@ public class TimeUsingHander extends Hander {
             });
         }
     }
+
+
 }
