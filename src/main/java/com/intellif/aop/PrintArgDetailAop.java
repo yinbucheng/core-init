@@ -1,7 +1,5 @@
-package com.intellif.interceptor;
+package com.intellif.aop;
 
-import com.intellif.annotation.Print;
-import com.intellif.annotation.PrintAll;
 import com.intellif.annotation.PrintArgsDetail;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -10,64 +8,53 @@ import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 import org.apache.log4j.Logger;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.cglib.proxy.MethodProxy;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ArgsDetailHander extends Hander {
-    private Logger logger = Logger.getLogger(ArgsDetailHander.class);
+@Aspect
+public class PrintArgDetailAop {
+
+    private Logger logger = Logger.getLogger(PrintArgDetailAop.class);
 
     private static Map<String,Object> cache = new ConcurrentHashMap<>();
-    @Override
-    public Object procced(Object o) {
-        Class clazz = o.getClass();
-        Print print = (Print) CglibUtils.getAnnotation(clazz,Print.class);
-        if(print==null)
-            return o;
-        Class[] interfaces = clazz.getInterfaces();
-        //采用cglib
-        if(interfaces==null||interfaces.length==0||(CglibUtils.containsCgilib(interfaces))){
-            Enhancer enhancer = new Enhancer();
-            Class baseClass = CglibUtils.getBaseClass(clazz);
-            enhancer.setSuperclass(baseClass);
-            enhancer.setCallback(new MethodInterceptor() {
-                @Override
-                public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
-                    Method sourceMethod = baseClass.getMethod(method.getName(),method.getParameterTypes());
-                    if(sourceMethod.getAnnotation(PrintArgsDetail.class)==null&&sourceMethod.getAnnotation(PrintAll.class)==null){
-                        return method.invoke(o,args);
-                    }
-                    StringBuilder sb = getAgrsDetails(method, args, baseClass);
-                    logger.info(sb.toString());
-                    Object result = method.invoke(o,args);
-                    return result;
-                }
-            });
-            return enhancer.create();
-        }else{
-            return Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                    Method realMethod = clazz.getMethod(method.getName(),method.getParameterTypes());
-                    if(realMethod.getAnnotation(PrintArgsDetail.class)==null&&realMethod.getAnnotation(PrintAll.class)==null){
-                        return method.invoke(o,args);
-                    }
-                    StringBuilder sb = getAgrsDetails(method, args, clazz);
-                    logger.info(sb.toString());
-                    return method.invoke(o,args);
-                }
-            });
+
+    public static boolean open = false;
+
+    @Pointcut("@annotation(com.intellif.annotation.PrintArgsDetail)||@annotation(com.intellif.annotation.PrintAll)")
+    private void testAop(){}
+
+    @Before("testAop()")
+    public void printArgDetail(JoinPoint joinPoint){
+        if(!open){
+            return;
+        }
+
+        try {
+            Object[] args = joinPoint.getArgs();
+            Object target = joinPoint.getTarget();
+            Signature signature = joinPoint.getSignature();
+            if (signature instanceof MethodSignature) {
+                MethodSignature ms = (MethodSignature) signature;
+                Method currentMethod = target.getClass().getMethod(ms.getName(), ms.getParameterTypes());
+                StringBuilder sb = getAgrsDetails(currentMethod, args, target.getClass());
+                logger.info(sb.toString());
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
+
 
     private StringBuilder getAgrsDetails(Method method, Object[] args, Class clazz) throws NoSuchMethodException {
         String[] ignore = null;
@@ -97,7 +84,7 @@ public class ArgsDetailHander extends Hander {
             if(content.endsWith(",")){
                 content = content.substring(0,content.length()-1);
             }
-           sb.append(content);
+            sb.append(content);
         }
         sb.append(")");
         return sb;
@@ -137,5 +124,4 @@ public class ArgsDetailHander extends Hander {
             throw new RuntimeException(e);
         }
     }
-
 }

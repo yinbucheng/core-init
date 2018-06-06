@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.intellif.interceptor.BeanProxy
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.intellif.aop.PrintArgDetailAop,\
+com.intellif.aop.TimeUseAop,com.intellif.config.LogPrintAutoConfig
