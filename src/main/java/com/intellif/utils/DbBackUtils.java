@@ -47,8 +47,8 @@ public class DbBackUtils {
      * @param savePath
      * @throws Exception
      */
-    public static boolean dbRecover(String dbUser, String dbPass, String dbHost,
-                                 String dbPort, String dbName, String savePath) throws Exception {
+    public static boolean dbRecover(String dbHost, int dbPort, String dbUser,
+                                 String dbPass, String dbName, String savePath){
         try {
             // 获取操作数据库的相关属性
             Runtime runtime = Runtime.getRuntime();
@@ -103,9 +103,14 @@ public class DbBackUtils {
     }
 
     public static void main(String[] args) {
-        if(dbBackup("127.0.0.1",3306,"root","introcks1234","D://backDB","test.sql","intellif_oms"))
-            System.out.println("备份成功");
+//        if(dbBackup("39.108.230.81",3306,"root","123456","D://backUP","test.sql","teacher_db")){
+//            System.out.println("备份成功");
+//        }else{
+//            System.out.println("备份失败");
+//        }
+        if(dbRecover("39.108.230.81",3306,"root","123456","teacher_db","D://backUP//test.sql"))
+            System.out.println("导入成功");
         else
-            System.out.println("备份失败");
+            System.out.println("导入失败");
     }
 }
