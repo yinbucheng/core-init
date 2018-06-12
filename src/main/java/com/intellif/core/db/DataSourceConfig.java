@@ -14,19 +14,19 @@ public class DataSourceConfig {
     private Logger log = Logger.getLogger(DataSourceConfig.class);
 
     @Bean(name = "master")
-    @ConfigurationProperties(prefix="spring.datasource.master")
+    @ConfigurationProperties(prefix = "spring.datasource.master")
     public DataSource masterDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean(name = "slave")
-    @ConfigurationProperties(prefix="spring.datasource.slave")
+    @ConfigurationProperties(prefix = "spring.datasource.slave")
     public DataSource slaveDataSource() {
         return DataSourceBuilder.create().build();
     }
 
     @Bean(name = "slave2")
-    @ConfigurationProperties(prefix="spring.datasource.slave2")
+    @ConfigurationProperties(prefix = "spring.datasource.slave2")
     public DataSource slaveDataSource2() {
         return DataSourceBuilder.create().build();
     }

@@ -30,7 +30,7 @@ public class PersonServiceImpl extends ServiceImpl<PersonDao,Person> implements 
 
     @Override
     @PrintAll
-    //@ReadOnly
+    @ReadOnly
     public Object listPerson() {
         return baseDao.findAll();
     }
