@@ -25,11 +25,12 @@ public class PersonServiceImpl extends ServiceImpl<PersonDao,Person> implements 
     @Transactional(propagation = Propagation.REQUIRED)
     public void savePerson(Person person) {
         baseDao.save(person);
+        int i = 1/0;
     }
 
     @Override
     @PrintAll
-    @ReadOnly
+    //@ReadOnly
     public Object listPerson() {
         return baseDao.findAll();
     }
