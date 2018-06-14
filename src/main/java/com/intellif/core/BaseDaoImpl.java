@@ -379,7 +379,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             String key = value;
            Column column =  field.getAnnotation(Column.class);
            if(column!=null){
-               value = column.name();
+               key = column.name();
            }
            result.put(key,value);
         }
