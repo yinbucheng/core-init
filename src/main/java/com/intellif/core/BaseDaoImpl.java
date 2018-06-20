@@ -841,6 +841,33 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
         return jdbcTemplate.queryForObject(sql,params,clazz);
     }
 
+    @Override
+    public List<?> findWrapper(Wrapper wrapper) {
+        if(wrapper instanceof HQLWrapper){
+            Map<String, Object> map = getHSql(wrapper.getQuery());
+            String jpaSql = (String) map.get("sql");
+            Integer count = (Integer) map.get("count");
+            //获取数据
+            Query query = entityManager.createQuery(jpaSql);
+            setQueryParameters(count,query,wrapper.getParams().toArray());
+            List<Object[]> datas =  query.getResultList();
+            return datas;
+        }else if(wrapper instanceof SQLWrapper){
+          return findSql(wrapper.getQuery(),wrapper.getParams().toArray());
+        }
+        return null;
+    }
+
+    @Override
+    public <T2> List<T2> findWrapper(Wrapper wrapper, Class<T2> clazz) {
+        if(wrapper instanceof HQLWrapper){
+            return findHql(wrapper.getQuery(),clazz,wrapper.getParams().toArray());
+        }else if(wrapper instanceof SQLWrapper){
+             return findSql(wrapper.getQuery(),clazz,wrapper.getParams().toArray());
+        }
+        return null;
+    }
+
     private void setQueryParamters(Map<String, Object> data, Query query) {
         if(data!=null){
             for(Map.Entry<String,Object> entry:data.entrySet()){

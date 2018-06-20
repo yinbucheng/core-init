@@ -335,4 +335,10 @@ public interface BaseDao<T> {
      * @return
      */
     <T2> T2 findOneSql(String sql, Class<T2> clazz, Object... params);
+
+
+    List<?> findWrapper(Wrapper wrapper);
+
+    <T2> List<T2> findWrapper(Wrapper wrapper,Class<T2> clazz);
+
 }

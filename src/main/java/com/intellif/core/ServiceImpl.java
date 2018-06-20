@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ServiceImpl<M extends  BaseDao<T>,T> implements IService<T>{
 
@@ -68,5 +69,15 @@ public class ServiceImpl<M extends  BaseDao<T>,T> implements IService<T>{
     @Override
     public List<T> listBetweenField(String fieldName, Object start, Object end) {
         return baseDao.findBetweenField(fieldName,start,end);
+    }
+
+    @Override
+    public List<?> findWrapper(Wrapper wrapper) {
+        return baseDao.findWrapper(wrapper);
+    }
+
+    @Override
+    public <T2> List<T2> findWrapper(Wrapper wrapper, Class<T2> clazz) {
+        return baseDao.findWrapper(wrapper,clazz);
     }
 }

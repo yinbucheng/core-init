@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-@Configuration
-@Primary
+//@Configuration
+//@Primary
 public class DynamicRoutingDataSource extends AbstractRoutingDataSource {
     @Autowired
     private ApplicationContext applicationContext;

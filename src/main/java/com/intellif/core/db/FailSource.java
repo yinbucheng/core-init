@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 用来统计连接失败的datasource
  */
-@Component
+//@Component
 public class FailSource {
 
     private Integer maxFail = 2;

@@ -2,6 +2,7 @@ package com.intellif.core;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础service
@@ -76,5 +77,9 @@ public interface IService<T> {
      * @return
      */
     List<T> listBetweenField(String fieldName, Object start, Object end);
+
+    List<?> findWrapper(Wrapper wrapper);
+
+    <T2> List<T2> findWrapper(Wrapper wrapper,Class<T2> clazz);
 
 }
