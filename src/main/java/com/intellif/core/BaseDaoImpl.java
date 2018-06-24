@@ -854,9 +854,9 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             HQLWrapper hqlWrapper = (HQLWrapper) wrapper;
             List<Map<String,Object>> result = new LinkedList<>();
             if(datas!=null&&datas.size()>0){
-                Map<String,Object> temp = new HashMap<>();
                 int len = hqlWrapper.getArgs().size();
                 for(Object[] data:datas) {
+                    Map<String,Object> temp = new HashMap<>();
                     for (int i = 0; i < len; i++) {
                         temp.put((String) hqlWrapper.getArgs().get(i),data[i]);
                     }

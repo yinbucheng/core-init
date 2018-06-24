@@ -43,7 +43,7 @@ public class PersonController{
 	@PrintAll
 	public Object listAll(){
 		Wrapper wrapper = new HQLWrapper(Person.class);
-		wrapper.showSelect("name","age").orderBy("id",false);
+		wrapper.showSelect("id","name","age").orderBy("id",false);
 		List<?> datas = personService.findWrapper(wrapper);
 		return ServerResult.success(datas);
 	}
