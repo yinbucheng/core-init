@@ -842,7 +842,7 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
     }
 
     @Override
-    public List<?> findWrapper(Wrapper wrapper) {
+    public List<Map<String,Object>> findWrapper(Wrapper wrapper) {
         if(wrapper instanceof HQLWrapper){
             Map<String, Object> map = getHSql(wrapper.getQuery());
             String jpaSql = (String) map.get("sql");
@@ -851,7 +851,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
             Query query = entityManager.createQuery(jpaSql);
             setQueryParameters(count,query,wrapper.getParams().toArray());
             List<Object[]> datas =  query.getResultList();
-            return datas;
+            HQLWrapper hqlWrapper = (HQLWrapper) wrapper;
+            List<Map<String,Object>> result = new LinkedList<>();
+            if(datas!=null&&datas.size()>0){
+                Map<String,Object> temp = new HashMap<>();
+                int len = hqlWrapper.getArgs().size();
+                for(Object[] data:datas) {
+                    for (int i = 0; i < len; i++) {
+                        temp.put((String) hqlWrapper.getArgs().get(i),data[i]);
+                    }
+                    result.add(temp);
+                }
+            }
+            return result;
         }else if(wrapper instanceof SQLWrapper){
           return findSql(wrapper.getQuery(),wrapper.getParams().toArray());
         }

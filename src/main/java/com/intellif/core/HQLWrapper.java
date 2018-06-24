@@ -1,8 +1,7 @@
 package com.intellif.core;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HQLWrapper<T> implements Wrapper<T> {
     String className = null;
@@ -12,6 +11,13 @@ public class HQLWrapper<T> implements Wrapper<T> {
     //封装接收的参数
     List<Object> params = new LinkedList<>();
 
+    private List<String> args = new LinkedList<>();
+
+
+    public List<String> getArgs(){
+        return args;
+    }
+
     public HQLWrapper showSelect(String... names){
        if(names==null||names.length==0) {
            sb.append("select p from ").append(className).append(" p ");
@@ -19,6 +25,7 @@ public class HQLWrapper<T> implements Wrapper<T> {
           int length = names.length;
           sb.append("select ");
           for(int i=0;i<length;i++){
+              args.add(names[i]);
               sb.append(" p.").append(names[i]);
               if(i!=length-1){
                   sb.append(",");

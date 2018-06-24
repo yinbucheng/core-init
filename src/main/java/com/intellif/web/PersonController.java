@@ -1,12 +1,16 @@
 package com.intellif.web;
 
 import com.intellif.annotation.PrintAll;
+import com.intellif.core.HQLWrapper;
 import com.intellif.core.ServerResult;
+import com.intellif.core.Wrapper;
 import com.intellif.domain.Person;
 import com.intellif.service.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
 * 作者:步程
@@ -38,7 +42,9 @@ public class PersonController{
 	@RequestMapping("/listAll")
 	@PrintAll
 	public Object listAll(){
-		Object datas = personService.listPerson();
+		Wrapper wrapper = new HQLWrapper(Person.class);
+		wrapper.showSelect("name","age").orderBy("id",false);
+		List<?> datas = personService.findWrapper(wrapper);
 		return ServerResult.success(datas);
 	}
 }
